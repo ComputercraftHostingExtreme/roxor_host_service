@@ -1,3 +1,4 @@
+--RoxorBrowser v1.0.0
 function loadWebpage()
 	term.clear()
 	dev.setColor(colors.yellow)
