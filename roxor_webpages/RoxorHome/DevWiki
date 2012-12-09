@@ -1,0 +1,42 @@
+function loadWebpage()
+	term.clear()
+	dev.setColor(colors.yellow)
+	dev.titleBar("www.RoxorHome.com/DevWiki")
+	term.setBackgroundColor(colors.yellow)
+	term.setTextColor(colors.blue)
+	term.setCursorPos(1,2)
+	print("    Welcome to RoxorHome!    ")
+	term.setBackgroundColor(colors.blue)
+	term.setTextColor(colors.white)
+	term.setCursorPos(1,3)
+	print("Home")
+	term.setCursorPos(1,7)
+	print("DevWiki")
+	print()
+	term.setBackgroundColor(colors.yellow)
+	print("Welcome to the Roxor developer wiki. Here you will find info about the future operating system and the browser.")
+	print("NOTE: This site is under contruction")
+end
+
+while true do
+	loadWebpage()
+	sEvent, button, mousex, mousey = os.pullEvent("mouse_click")
+	if button == 1 then
+		if mousex > 0 and mousex < 5 and mousey == 2 then
+			dev.loadWebpage("RoxorHome/home")
+		elseif mousex > 6 and mousex < 14 and mousey == 2 then
+			dev.loadWebpage("RoxorHome/DevWiki")
+		elseif mousex > 4 and mousex < 40 and mousey == 1 then
+			term.setCursorPos(1,1)
+			term.clearLine()
+			term.setBackgroundColor(colors.lightGray)
+			term.setTextColor(colors.gray)
+			term.setCursorPos(1,1)
+			print("                                                ")
+			term.setCursorPos(1,1)
+			write("URL: ")
+			url = read()
+			dev.loadWebpage(url)
+		end
+	end
+end
