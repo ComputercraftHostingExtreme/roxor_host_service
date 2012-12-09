@@ -1,0 +1,65 @@
+function exitToHome()
+	os.run({}, "RoxorBrowser/browser")
+end
+
+function setColor(color)
+	local line = 1
+	for i=1,19 do
+		term.setCursorPos(1,line)
+		term.setBackgroundColor(color)
+		print("                                                ")
+		local line = line + 1
+	end
+end
+
+function titleBar( sUrl )
+	term.setCursorPos(1,1)
+	term.clearLine()
+	term.setCursorPos(1,1)
+	term.setBackgroundColor(colors.lightGray)
+	term.setTextColor(colors.gray)
+	print("                                                ")
+	term.setCursorPos(1,1)
+	print("URL: http://"..sUrl)
+end
+
+function showError( sErrorText )
+	term.clear()
+	term.setCursorPos(1,1)
+	setColor(colors.blue)
+	titleBar("Error")
+	term.setBackgroundColor(colors.blue)
+	term.setTextColor(colors.white)
+	print(sErrorText)
+	print("System: Press any key to continue...")
+	os.pullEvent("key")
+	os.run({}, "RoxorBrowser/browser")
+end
+
+function loadWebpage( sUrl )
+	local Url = "https://raw.github.com/ComputercraftHostingExtreme/RoxorInternetBrowser/webpages/webpage/"..sUrl
+	local webpage = http.request(Url)
+	sEvent, p1, p2, p3, p4, p5 = os.pullEvent()
+	if sEvent == "http_success" then
+		webpageD = webpage.readAll()
+		webpage.close()
+		filec.fWrite("RoxorBrowser/TempFiles/webpage.ts", webpageD)
+		
+		if filec.readLine("RoxorBrowser/TempFiles/webpage.ts", 1) == "--RoxorBrowser v1.0.0" then
+			os.run({}, "RoxorBrowser/TempFiles/webpage.ts")
+			os.run({}, "RoxorBrowser/browser")
+		else
+			term.clear()
+			setColor(colors.blue)
+			titleBar("error")
+			term.setCursorPos(1,2)
+			term.setBackgroundColor(colors.blue)
+			term.setTextColor(colors.white)
+			showError("System: Not designed for the newest Roxor")
+		end
+	elseif sEvent == "http_failure" then
+		showError("System: Website doen't exist or your connection is bad")
+	else
+		loadWebpage( sUrl )
+	end
+end

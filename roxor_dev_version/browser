@@ -1,0 +1,13 @@
+os.loadAPI("filec")
+os.loadAPI("dev")
+
+term.clear()
+term.setCursorPos(1,1)
+dev.setColor(colors.blue)
+dev.titleBar("home")
+term.setCursorPos(1,2)
+term.setBackgroundColor(colors.blue)
+term.setTextColor(colors.white)
+print("Loading Roxor...")
+sleep(2)
+dev.loadWebpage("RoxorHome/index")

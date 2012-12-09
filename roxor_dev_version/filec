@@ -1,0 +1,92 @@
+--[[
+Filec API for Roxor OS
+]]--
+
+function exists(sPath)
+	local hFile = io.open(sPath, "r")
+	if hFile ~= nil then
+		hFile:close()
+		return true
+	end
+	return false
+end
+
+function readToTable(sPath)
+	if exists(sPath) then
+		local hFile = io.open(sPath, "r")
+		local tLines = {}
+		local nIteration = 1
+		local sLine = hFile:read()
+		while sLine ~= nil do
+			tLines[nIteration] = sLine
+			sLine = hFile:read()
+			nIteration = nIteration + 1
+		end
+		hFile:close()
+		return tLines
+	end
+	return {}
+end
+
+function readLine(sPath, nLine)
+	if exists(sPath) then
+		local tLines = readToTable(sPath)
+		return tLines[nLine]
+	end
+	return ""
+end
+
+function readAllText(sPath)
+	if exists(sPath) then
+		local hFile = io.open(sPath, "r")
+		return hFile:read("*a")
+	end
+	return ""
+end
+
+function fWrite(sPath, sText)
+	local hFile = io.open(sPath, "w")
+	hFile:write(sText)
+	hFile:close()
+end
+
+function fWriteFromTable(sPath, tTable)
+	local sText = ""
+	for n = 1, #tTable do
+		sText = sText .. tTable[n] .. "\n"
+	end
+	fWrite(sPath, sText)
+end
+
+function fWriteAtStart(sPath, sText)
+	local _sText = readAllText(sPath)
+	fWrite(sPath, sText .. "\n" .. _sText)
+end
+
+function fWriteAtStartFromTable(sPath, tTable)
+	local sText = ""
+	for n = 1, #tTable do
+		sText = sText .. tTable[n] .. "\n"
+	end
+	fWriteAtStart(sPath, sText)
+end
+
+function fAppend(sPath, sText)
+	local hFile = io.open(sPath, "a")
+	hFile:write(sText .. "\n")
+	hFile:close()
+end
+
+function fAppendFromTable(sPath, tTable)
+	local sText = ""
+	for n = 1, #tTable do
+		sText = sText .. tTable[n] .. "\n"
+	end
+	fAppend(sPath, sText)
+end
+
+function replaceLine(sPath, nLine, sText)
+	local tLines = readToTable(sPath)
+	tLines[nLine] = sText
+	fWriteFromTable(sPath, tLines)
+end
